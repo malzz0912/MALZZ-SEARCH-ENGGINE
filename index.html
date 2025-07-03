@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google API Pencarian</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background-color: #d32f2f;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      font-size: 24px;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      color: #0057b7;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      background-color: #0057b7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .results {
+      margin-top: 30px;
+    }
+
+    .result {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .result h3 {
+      color: #0057b7;
+      margin: 0 0 5px;
+    }
+
+    .result small {
+      color: #0f9d58;
+    }
+
+    .result p {
+      margin: 10px 0 0;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    Google Custom Search
+  </header>
+
+  <div class="container">
+    <input type="text" id="searchInput" placeholder="Ketik pertanyaan kamu...">
+    <button onclick="search()">Cari</button>
+
+    <div class="results" id="results"></div>
+  </div>
+
+  <script>
+    const API_KEY = 'AIzaSyAcmKzgazDZQWL84LUczsBtZ8Nes2_duLs';
+    const CX = 'd5199ac0cbfb54578'; // <- pastikan ini CX yang lengkap
+
+    async function search() {
+      const keyword = document.getElementById('searchInput').value;
+      const url = `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CX}&q=${encodeURIComponent(keyword)}`;
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      if (!data.items) {
+        resultsDiv.innerHTML = '<p>Tidak ada hasil.</p>';
+        return;
+      }
+
+      data.items.forEach(item => {
+        resultsDiv.innerHTML += `
+          <div class="result">
+            <a href="${item.link}" target="_blank">
+              <h3>${item.title}</h3>
+            </a>
+            <p>${item.snippet}</p>
+            <small>${item.link}</small>
+          </div>
+        `;
+      });
+    }
+  </script>
+
+</body>
+  </html>
